@@ -1,6 +1,6 @@
 // import ratpack.groovy.template.MarkupTemplateModule
-import static ratpack.jackson.Jackson.json
 // import static ratpack.groovy.Groovy.groovyMarkupTemplate
+import static ratpack.jackson.Jackson.json
 import static ratpack.groovy.Groovy.ratpack
 
 ratpack {
