@@ -16,16 +16,16 @@ ratpack {
     //   render groovyMarkupTemplate("index.gtpl", title: "My Ratpack App")
     // }
 
-    // path('image') {
-    //   byMethod {
-    //     get {
-    //       render json([:])
-    //     }
-    //     post {
-    //       render json([:])
-    //     }
-    //   }
-    // }
+    path('users') {
+      byMethod {
+        get {
+          render json([['id':1, 'username':'Admin'],['id':2, 'username':'Demo']])
+        }
+        post {
+          render json([:])
+        }
+      }
+    }
 
 
     files { dir "public" indexFiles 'index.html' }
