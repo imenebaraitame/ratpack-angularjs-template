@@ -47,6 +47,11 @@ ratpack {
           post {
 
           }
+          delete {
+            userService.delete(pathTokens['id']).then { def id ->
+                render(json(['id': id]))
+            }
+          }
         }
       }
 

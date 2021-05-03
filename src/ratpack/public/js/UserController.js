@@ -1,7 +1,10 @@
 app.controller('UserController', function ($scope, $resource) {
 
   var User = $resource('/users');
-
+  $scope.user = {
+    username: 'admin',
+    password: 'admin'
+  }
   // Create a User
   $scope.createUser = function(){
     if ($scope.user.username != ''){

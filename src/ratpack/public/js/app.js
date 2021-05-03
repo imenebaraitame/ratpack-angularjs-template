@@ -33,23 +33,19 @@ app.config(['$resourceProvider', function($resourceProvider) {
 app.controller('HomeController', function ($scope, $resource) {
   $scope.users = [];
 
-  var User = $resource('/users');
+  var User = $resource('/users/:id');
 
   // Get all users
   $scope.users = User.query();
 
   // Delete a User
   $scope.deleteUser = function(user){
-      var i = findById(user.id);
-      $scope.users.splice(i, 1);
-  }
-
-  function findById(id){
-      for (var index = 0; index < $scope.users.length; index++){
-          if ($scope.users[index].id === id){
-              return index;
-          }
-      }
+      User.delete({id: user.id}, function () {
+        var index = $scope.users.filter(function (item) {
+          return item.id !== user.id;
+        });
+        $scope.users.splice(index, 1);
+      });
   }
 
 });
