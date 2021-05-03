@@ -5,12 +5,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state({
       name: 'Home',
       url: '/',
-      template: '<h1>Home</h1>'
+      templateUrl: 'list.html'
     })
     .state({
-      name: 'Users',
-      url: '/users',
-      template: '<h1>Users</h1>'
+      name: 'Create a User',
+      url: '/create',
+      templateUrl: 'user.html',
+      controller: 'UserController'
     })
     .state({
       name: 'About',
@@ -23,7 +24,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 
 app.controller('HomeController', function ($scope, $resource) {
-  $scope.username = 'Master';
+  $scope.user = {
+    id: 0,
+    username: '',
+    password: ''
+  };
   $scope.users = [];
 
   var User = $resource('/users');
@@ -36,18 +41,6 @@ app.controller('HomeController', function ($scope, $resource) {
   }, function(err){
       console.log('Error:', err);
   });
-
-  // Create a User
-  $scope.createUser = function(){
-    if ($scope.username != ''){
-      var newUser = {
-        'id': $scope.users.length,
-        'username': $scope.username
-      };
-      $scope.users.push(newUser);
-      $scope.username = '';
-    }
-  }
 
   // Delete a User
   $scope.deleteUser = function(user){
