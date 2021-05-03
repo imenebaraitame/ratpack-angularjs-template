@@ -1,6 +1,7 @@
 // import ratpack.groovy.template.MarkupTemplateModule
 // import static ratpack.groovy.Groovy.groovyMarkupTemplate
 import static ratpack.jackson.Jackson.json
+import static ratpack.jackson.Jackson.fromJson
 import static ratpack.groovy.Groovy.ratpack
 import ratpack.hikari.HikariModule
 import ratpack.service.Service
@@ -9,7 +10,7 @@ import com.j256.ormlite.table.TableUtils
 
 ratpack {
   serverConfig {
-    port(8080) // default port = 5050
+    port(3000) // default port = 5050
   }
   // bindings {
   //   module MarkupTemplateModule
@@ -58,19 +59,11 @@ ratpack {
             }
           }
           post {
-            if (request.headers.get('Content-type') == 'application/json') {
-                // working with JSON on CURL
-//                      render( parse(jsonNode()).map { def node -> node.get('name').asText() })
-                parse(fromJson(User)).then { def user ->
-                  println('Creating a new user...')
-                    userService.create( user ).then { def id ->
-                        render(json(user))
-                    }
+            parse(fromJson(User)).then { def user ->
+                userService.create( user ).then { def id ->
+                  render(json(user))
                 }
-            } else {
-                render 'Sorry, only json requests are allowed.'
             }
-
           }
         }
 

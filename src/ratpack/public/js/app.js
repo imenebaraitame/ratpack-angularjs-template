@@ -5,6 +5,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state({
       name: 'Home',
       url: '/',
+      controller: 'HomeController',
       templateUrl: 'list.html'
     })
     .state({
@@ -23,24 +24,19 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 });
 
+/* Disable default behavior because by default, trailing slashes will be stripped from the calculated URLs
+app.config(['$resourceProvider', function($resourceProvider) {
+  // Don't strip trailing slashes from calculated URLs
+  $resourceProvider.defaults.stripTrailingSlashes = false;
+}]);*/
+
 app.controller('HomeController', function ($scope, $resource) {
-  $scope.user = {
-    id: 0,
-    username: '',
-    password: ''
-  };
   $scope.users = [];
 
   var User = $resource('/users');
 
   // Get all users
-  User.query({}, function(users){
-      users.forEach(function(user){
-          $scope.users.push(user);
-      });
-  }, function(err){
-      console.log('Error:', err);
-  });
+  $scope.users = User.query();
 
   // Delete a User
   $scope.deleteUser = function(user){
