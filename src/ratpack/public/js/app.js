@@ -15,6 +15,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controller: 'UserController'
     })
     .state({
+      name: 'edit',
+      url: '/edit',
+      templateUrl: 'user.html',
+      controller: 'UserController'
+    })
+    .state({
       name: 'about',
       url: '/about',
       template: '<h1>About</h1>'
