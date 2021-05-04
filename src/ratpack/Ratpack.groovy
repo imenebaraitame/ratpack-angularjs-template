@@ -64,8 +64,8 @@ ratpack {
             }
           }
           post {
-            parse(fromJson(User)).then { def user ->
-                userService.create( user ).then { def id ->
+            parse(fromJson(User)).then { User user ->
+                userService.create( user ).then { Integer id ->
                   render(json(user))
                 }
             }

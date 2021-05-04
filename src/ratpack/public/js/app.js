@@ -3,19 +3,19 @@ var app = angular.module('app', ['ui.router', 'ngResource', 'ngCookies']);
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state({
-      name: 'Home',
+      name: 'home',
       url: '/',
       controller: 'HomeController',
       templateUrl: 'list.html'
     })
     .state({
-      name: 'Create a User',
+      name: 'create',
       url: '/create',
       templateUrl: 'user.html',
       controller: 'UserController'
     })
     .state({
-      name: 'About',
+      name: 'about',
       url: '/about',
       template: '<h1>About</h1>'
     });
@@ -41,10 +41,11 @@ app.controller('HomeController', function ($scope, $resource) {
   // Delete a User
   $scope.deleteUser = function(user){
       User.delete({id: user.id}, function () {
-        var index = $scope.users.filter(function (item) {
-          return item.id !== user.id;
-        });
-        $scope.users.splice(index, 1);
+        for (var i = 0; i < $scope.users.length; i++) {
+          if ($scope.users[i].id === user.id){
+            $scope.users.splice(i, 1);
+          }
+        }
       });
   }
 
