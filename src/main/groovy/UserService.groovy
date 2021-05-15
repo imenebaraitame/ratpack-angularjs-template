@@ -24,6 +24,12 @@ class UserService {
         }
     }
 
+    Promise<Integer> update(User User) {
+        Blocking.get {
+            UserDao.update(User)
+        }
+    }
+
     Promise<User> get(String id) {
         Blocking.get {
             UserDao.queryForId(id)

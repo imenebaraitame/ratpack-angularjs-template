@@ -1,10 +1,15 @@
-app.controller('UserController', function ($scope, $resource) {
+app.controller('UserController', function ($scope, $resource, $stateParams, $state) {
 
-  var User = $resource('/users');
-  $scope.user = {
-    username: 'admin',
-    password: 'admin'
+  var User = $resource('/users/:id'/*, null, {
+    'update': { method: 'PUT', params: {id: "@id"}}
+  }*/);
+
+  if ($stateParams.userId){
+    $scope.user = User.get({id: $stateParams.userId}, function (user) {
+      return user;
+    });
   }
+
   // Create a User
   $scope.createUser = function(){
     if ($scope.user.username != ''){
@@ -12,11 +17,14 @@ app.controller('UserController', function ($scope, $resource) {
       user.username = $scope.user.username;
       user.password = $scope.user.password;
       user.$save();
-      $scope.user = {
-        username: '',
-        password: ''
-      }
+      $state.go('home');
     }
+  }
+
+  $scope.updateUser = function () {
+    $scope.user.$save();
+    // $scope.user.$update();
+    $state.go('home');
   }
 
 });

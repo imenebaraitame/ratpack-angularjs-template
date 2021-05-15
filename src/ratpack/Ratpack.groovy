@@ -42,7 +42,9 @@ ratpack {
       path(":id") { UserService userService ->
         byMethod {
           get {
-
+            userService.get(pathTokens['id']).then { User user ->
+              render json(user)
+            }
           }
           post {
 
@@ -63,13 +65,21 @@ ratpack {
               render json(users)
             }
           }
+
           post {
             parse(fromJson(User)).then { User user ->
+              if (user.id){
+                userService.update( user ).then { Integer id ->
+                  render(json(user))
+                }
+              } else {
                 userService.create( user ).then { Integer id ->
                   render(json(user))
                 }
+              }
             }
           }
+
         }
 
       } // path

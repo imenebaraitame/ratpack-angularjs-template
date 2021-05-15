@@ -16,7 +16,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     })
     .state({
       name: 'edit',
-      url: '/edit',
+      url: '/edit/{userId}',
       templateUrl: 'user.html',
       controller: 'UserController'
     })
@@ -37,12 +37,11 @@ app.config(['$resourceProvider', function($resourceProvider) {
 }]);*/
 
 app.controller('HomeController', function ($scope, $resource) {
-  $scope.users = [];
 
   var User = $resource('/users/:id');
 
   // Get all users
-  $scope.users = User.query();
+  $scope.users = User.query() || [];
 
   // Delete a User
   $scope.deleteUser = function(user){
