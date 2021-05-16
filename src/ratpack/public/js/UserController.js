@@ -1,8 +1,4 @@
-app.controller('UserController', function ($scope, $resource, $stateParams, $state) {
-
-  var User = $resource('/users/:id'/*, null, {
-    'update': { method: 'PUT', params: {id: "@id"}}
-  }*/);
+app.controller('UserController', function ($scope, $stateParams, $state, User) {
 
   if ($stateParams.userId){
     $scope.user = User.get({id: $stateParams.userId}, function (user) {
