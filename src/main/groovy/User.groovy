@@ -14,4 +14,6 @@ class User {
     String username
     @DatabaseField
     String password
+    @DatabaseField
+    Boolean isActive
 }
