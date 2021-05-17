@@ -12,15 +12,18 @@ app.controller('UserController', function ($scope, $stateParams, $state, User) {
       var user = new User();
       user.username = $scope.user.username;
       user.password = $scope.user.password;
-      user.$save();
-      $state.go('home');
+      user.$save().then(function () {
+        $state.go('home');
+      });
     }
   }
 
   $scope.updateUser = function () {
-    $scope.user.$save();
-    // $scope.user.$update();
-    $state.go('home');
+    // $scope.user.$update().
+    $scope.user.$save().then(function () {
+      $state.go('home');
+    });
+
   }
 
 });
