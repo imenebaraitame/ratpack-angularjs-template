@@ -1,7 +1,12 @@
-app.controller('HomeController', function ($scope, User) {
+app.controller('HomeController', function ($scope, $state, User) {
 
   // Get all users
-  $scope.users = User.query() || [];
+  User.query(function (users) {
+    $scope.users = users || [];
+    if ($scope.users.length == 0){
+      $state.transitionTo('create');
+    }
+  });
 
   // Delete a User
   $scope.deleteUser = function(user){
