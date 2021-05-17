@@ -19,8 +19,9 @@ app.controller('UserController', function ($scope, $stateParams, $state, User) {
   }
 
   $scope.updateUser = function () {
-    // $scope.user.$update().
-    $scope.user.$save().then(function () {
+    $scope.user.$update()
+    // $scope.user.$save()
+    .then(function () {
       $state.go('home');
     });
 

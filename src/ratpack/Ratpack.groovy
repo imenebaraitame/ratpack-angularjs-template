@@ -41,14 +41,21 @@ ratpack {
 
       path(":id") { UserService userService ->
         byMethod {
+          // Get a user
           get {
             userService.get(pathTokens['id']).then { User user ->
               render json(user)
             }
           }
-          post {
-
+          // Update a user
+          put {
+            parse(fromJson(User)).then { User user ->
+              userService.update( user ).then { Integer id ->
+                render(json(user))
+              }
+            }
           }
+          // Delete a user
           delete {
             userService.delete(pathTokens['id']).then { def id ->
                 render(json(['id': id]))
@@ -60,23 +67,25 @@ ratpack {
       all { UserService userService ->
 
         byMethod {
+          // Get all users
           get {
             userService.all.then { List<User> users ->
               render json(users)
             }
           }
-
+          // Create a user
           post {
             parse(fromJson(User)).then { User user ->
-              if (user.id){
-                userService.update( user ).then { Integer id ->
-                  render(json(user))
-                }
-              } else {
+              // It works in case you want to use the default behavior of $resource from angularjs (you can then delete the update PUT method above)
+              // if (user.id){
+              //   userService.update( user ).then { Integer id ->
+              //     render(json(user))
+              //   }
+              // } else {
                 userService.create( user ).then { Integer id ->
                   render(json(user))
                 }
-              }
+              // }
             }
           }
 

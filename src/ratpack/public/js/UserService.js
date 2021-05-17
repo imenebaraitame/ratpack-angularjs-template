@@ -1,5 +1,5 @@
 app.service('User', function ($resource) {
-  return   $resource('/users/:id'/*, null, {
-      'update': { method: 'PUT', params: {id: "@id"}}
-    }*/);
+  return $resource('/users/:id', {id: "@id"}, {
+      'update': { method: 'PUT'}
+    });
 });
