@@ -9,10 +9,11 @@ app.controller('UserController', function ($scope, $stateParams, $state, User) {
   // Create a User
   $scope.createUser = function(){
     if ($scope.user.username != ''){
-      var user = new User();
-      user.username = $scope.user.username;
-      user.password = $scope.user.password;
-      user.$save().then(function () {
+      new User({
+        username: $scope.user.username,
+        password: $scope.user.password,
+        isActive: $scope.user.isActive
+      }).$save().then(function () {
         $state.go('home');
       });
     }
