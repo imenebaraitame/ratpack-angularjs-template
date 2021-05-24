@@ -13,7 +13,6 @@ import ratpack.session.SessionModule
 import static ratpack.jackson.Jackson.jsonNode
 import ratpack.pac4j.RatpackPac4j
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator
-//import org.pac4j.http.profile.HttpProfile
 import org.pac4j.jwt.profile.JwtGenerator
 import org.pac4j.http.client.direct.ParameterClient
 import ratpack.exec.Blocking
@@ -65,7 +64,7 @@ ratpack {
     final def signatureConfiguration = new SecretSignatureConfiguration(JWT_SALT)
     final def encryptionConfiguration = new SecretEncryptionConfiguration(JWT_SALT)
     final def jwtAuthenticator = new JwtAuthenticator([signatureConfiguration], [encryptionConfiguration])
-    final def parameterClient = new ParameterClient("token", jwtAuthenticator);
+    final def parameterClient = new ParameterClient("token", jwtAuthenticator)
     parameterClient.supportGetRequest = true
     parameterClient.supportPostRequest = false
 
@@ -92,13 +91,9 @@ ratpack {
       path("login") { def ctx ->
         parse(jsonNode()).then({ def data ->
                             Blocking.get({
-                                      def model = ctx.get(AuthenticatorService).authenticate(data)
+                                      CommonProfile model = ctx.get(AuthenticatorService).authenticate(data)
                                       JwtGenerator generator = new JwtGenerator(signatureConfiguration, encryptionConfiguration)
-                                      
-                                      def profile = new CommonProfile()
-                                      profile.addAttribute("username", model.get('username'))
-                                      profile.addAttribute("password", model.get('password'))
-                                      return generator.generate(profile)
+                                      return generator.generate(model)
                                   }).onError({ def e ->
                                     ctx.response.status(400)
                                     render e.message
