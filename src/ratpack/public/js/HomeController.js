@@ -1,11 +1,15 @@
-app.controller('HomeController', function ($scope, $state, User, $modal) {
+app.controller('HomeController', function ($scope, $state, User, $modal, AuthenticationService) {
+
+
+  // reset login status
+  AuthenticationService.Logout();
 
   // Get all users
   User.query(function (users) {
     $scope.users = users || [];
-    if ($scope.users.length == 0){
-      $state.transitionTo('create');
-    }
+    // if ($scope.users.length == 0){
+    //   $state.transitionTo('create');
+    // }
   });
 
   // Delete a User

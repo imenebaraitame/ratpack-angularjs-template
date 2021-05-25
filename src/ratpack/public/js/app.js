@@ -1,4 +1,6 @@
-var app = angular.module('app', ['ui.router', 'ngResource', 'ngCookies', 'ui.bootstrap']);
+var app = angular
+  .module('app', ['ui.router', 'ngResource', 'ngCookies', 'ui.bootstrap', 'ngStorage'])
+  run(run);
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -21,6 +23,17 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controller: 'UserController'
     })
     .state({
+      name: 'login',
+      url: '/login',
+      templateUrl: 'login.html',
+      controller: 'LoginController'
+    })
+    .state({
+      name: 'logout',
+      url: '/logout',
+      controller: 'UserController'
+    })
+    .state({
       name: 'about',
       url: '/about',
       template: '<h1>About</h1>'
@@ -35,3 +48,20 @@ app.config(['$resourceProvider', function($resourceProvider) {
   // Don't strip trailing slashes from calculated URLs
   $resourceProvider.defaults.stripTrailingSlashes = false;
 }]);*/
+
+function run($rootScope, $http, $location, $localStorage) {
+    // keep user logged in after page refresh
+    // if ($localStorage.currentUser) {
+        // $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
+    // }
+
+    // redirect to login page if not logged in and trying to access a restricted page
+    // $rootScope.$on('$locationChangeStart', function (event, next, current) {
+    //   console.log('current location: ', $location.path());
+        // var publicPages = ['/login'];
+        // var restrictedPage = publicPages.indexOf($location.path()) === -1;
+        // if (restrictedPage && !$localStorage.currentUser) {
+        //     $location.path('/login');
+        // }
+    // });
+}

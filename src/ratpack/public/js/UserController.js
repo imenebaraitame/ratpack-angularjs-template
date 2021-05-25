@@ -17,15 +17,15 @@ app.controller('UserController', function ($scope, $stateParams, $state, User) {
         $state.go('home');
       });
     }
-  }
+  };
 
+  // Update a user
   $scope.updateUser = function () {
     $scope.user.$update()
     // $scope.user.$save()
     .then(function () {
       $state.go('home');
     });
-
-  }
+  };
 
 });

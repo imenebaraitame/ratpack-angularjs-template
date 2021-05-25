@@ -1,53 +1,24 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Ratpack & AngularJS</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+<div class="col-md-6 col-md-offset-3">
 
-  </head>
+    <h2>Login</h2>
 
-  <body>
-
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Ratpack & AngularJS</a>
+    <form name="form" ng-submit="form.$valid && vm.login()" novalidate>
+        <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }">
+            <input type="text" name="username" class="form-control" ng-model="vm.username" placeholder="User Name" required />
+            <div ng-messages="form.$submitted && form.username.$error" class="help-block">
+                <div ng-message="required">User Name is required</div>
+            </div>
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li ui-sref-active="active"><a ui-sref="home">Home <span class="sr-only">(current)</span></a></li>
-            <li ui-sref-active="active"><a ui-sref="create">Create a User</a></li>
-          </ul>
-
-          <ul class="nav navbar-nav navbar-right">
-            <li ui-sref-active="active"><a ui-sref="about">About</a></li>
-          </ul>
-
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
-  <div class="container-fluid">
-
-    <div class="row">
-      <div class="col col-md-12">
-        <h1> ${model.title}</h1>
-      </div>
-    </div>
-
-
-  </div><!-- /.container-fluid -->
-
-  </body>
-</html>
+        <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.password.$invalid }">
+            <input type="password" name="password" class="form-control" ng-model="vm.password" placeholder="Password" autocomplete="false" required />
+            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
+                <div ng-message="required">Password is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button ng-disabled="vm.loading" class="btn btn-primary">Login</button>
+            <img ng-if="vm.loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </div>
+        <div ng-if="vm.error" class="alert alert-danger">{{vm.error}}</div>
+    </form>
+</div>
