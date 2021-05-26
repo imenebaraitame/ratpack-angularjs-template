@@ -1,6 +1,7 @@
-app.controller('LoginController', function ($state, AuthenticationService) {
+app.controller('LoginController', function ($scope, $state, $location, AuthenticationService) {
 
-  var vm = this;
+  $scope.vm = {};
+  var vm = $scope.vm;
 
   vm.error = '';
   vm.username = '';
@@ -9,13 +10,12 @@ app.controller('LoginController', function ($state, AuthenticationService) {
 
   // Login a User
   vm.login = function(){
-    console.log('logging...');
     vm.loading = true;
-AuthenticationService.Login(vm.username, vm.password, function (result) {
+    AuthenticationService.Login(vm.username, vm.password, function (result) {
     if (result === true) {
-        $state.go('home');
+        $location.path('/');
     } else {
-        vm.error = 'Username or password is incorrect';
+        vm.error = result; //'Username or password is incorrect';
         vm.loading = false;
     }
 });

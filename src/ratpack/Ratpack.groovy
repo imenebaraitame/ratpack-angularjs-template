@@ -98,7 +98,7 @@ ratpack {
                                     ctx.response.status(400)
                                     render e.message
                             }).then({ def token ->
-                              render json(token)
+                              render json(['token': token])
                             })
                         })
 

@@ -44,8 +44,10 @@
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-            <li ng-hide="currentUser.isNotLoggedIn"><a ui-sref="login">Login</a></li>
-            <li ng-show="currentUser.isLoggedIn"><a ui-sref="logout">Logout</a></li>
+            <!-- <li ng-hide="currentUser"><a ui-sref="login">Login</a></li> -->
+            <li><a ui-sref="login">Login</a></li>
+            <!-- <li ng-show="currentUser"><a ui-sref="logout">Logout</a></li> -->
+            <li><a ui-sref="logout">Logout</a></li>
             <li><a ui-sref="about">About</a></li>
           </ul>
 

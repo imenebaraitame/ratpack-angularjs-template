@@ -18,6 +18,8 @@ app.factory('AuthenticationService', function ($http, $localStorage) {
                 // execute callback with false to indicate failed login
                 callback(false);
             }
+        }).error(function (message) {
+          callback(message);
         });
   };
 
