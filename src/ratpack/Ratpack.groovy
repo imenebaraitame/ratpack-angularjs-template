@@ -89,6 +89,7 @@ ratpack {
 
     prefix("api") {
       path("login") { def ctx ->
+
         parse(jsonNode()).then({ def data ->
                             Blocking.get({
                                       CommonProfile model = ctx.get(AuthenticatorService).authenticate(data)
@@ -106,6 +107,14 @@ ratpack {
                 render json([username:'', password:''])
             }
 
+          }
+
+          post("register") { UserService userService ->
+            parse(fromJson(User)).then { User user ->
+              userService.create(user).then {
+                render json([result: (user != null) ])
+              }
+            }
           }
     }
 

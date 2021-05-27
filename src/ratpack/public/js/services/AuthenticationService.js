@@ -23,6 +23,22 @@ app.factory('AuthenticationService', function ($http, $localStorage) {
         });
   };
 
+  service.Register = function (username, password, agree, callback) {
+    $http.post('/api/register', { username: username, password: password, isActive: agree})
+        .success(function (response) {
+            // register successful if a true result in the response
+            if (response.result) {
+                // execute callback with true to indicate successful registeration
+                callback(true);
+            } else {
+                // execute callback with false to indicate failed registeration
+                callback(false);
+            }
+        }).error(function (message) {
+          callback(message);
+        });
+  };
+
   service.Logout = function () {
       // remove user from local storage and clear http auth header
       delete $localStorage.currentUser;
