@@ -1,9 +1,6 @@
 app.controller('HomeController', function ($scope, $state, User, $modal, AuthenticationService) {
 
 
-  // reset login status
-  AuthenticationService.Logout();
-
   // Get all users
   User.query(function (users) {
     $scope.users = users || [];

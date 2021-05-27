@@ -102,11 +102,12 @@ ratpack {
                               render json(['token': token])
                             })
                         })
+          }
 
-            post("logout") {
-                render json([username:'', password:''])
-            }
-
+          post("logout") { def ctx ->
+              RatpackPac4j.logout(ctx).then {
+                  redirect("/") // not really needed.
+              }
           }
 
           post("register") { UserService userService ->

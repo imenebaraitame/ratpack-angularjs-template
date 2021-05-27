@@ -1,4 +1,4 @@
-app.factory('AuthenticationService', function ($http, $localStorage) {
+app.factory('AuthenticationService', function ($rootScope, $location, $http, $localStorage) {
   var service = {};
 
   service.Login = function (username, password, callback) {
@@ -40,9 +40,14 @@ app.factory('AuthenticationService', function ($http, $localStorage) {
   };
 
   service.Logout = function () {
-      // remove user from local storage and clear http auth header
-      delete $localStorage.currentUser;
-      $http.defaults.headers.common.Authorization = '';
+    $http.post('/api/logout', {})
+        .success(function (response) {
+          // remove user from local storage and clear http auth header
+          delete $localStorage.currentUser;
+          $rootScope.currentUser = false;
+          $http.defaults.headers.common.Authorization = '';
+          $location.path('/login');
+        });
   };
 
   return service;

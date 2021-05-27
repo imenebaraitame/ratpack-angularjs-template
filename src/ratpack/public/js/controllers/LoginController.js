@@ -1,4 +1,4 @@
-app.controller('LoginController', function ($scope, $state, $location, AuthenticationService) {
+app.controller('LoginController', function ($rootScope, $scope, $state, $location, $localStorage, AuthenticationService) {
 
   $scope.vm = {};
   var vm = $scope.vm;
@@ -9,11 +9,15 @@ app.controller('LoginController', function ($scope, $state, $location, Authentic
   vm.loading = false;
   vm.agree = false;
 
+  // reset login status
+  AuthenticationService.Logout();
+
   // Login a User
   vm.login = function(){
     vm.loading = true;
     AuthenticationService.Login(vm.username, vm.password, function (result) {
       if (result === true) {
+          $rootScope.currentUser = $localStorage.currentUser;
           $location.path('/');
       } else {
           vm.error = result; //'Username or password is incorrect';
@@ -22,11 +26,7 @@ app.controller('LoginController', function ($scope, $state, $location, Authentic
     });
   };
 
-  // Logout
-  vm.logout = function(){
-  };
-
-  // Logout
+  // Register
   vm.register = function(){
     vm.loading = true;
     AuthenticationService.Register(vm.username, vm.password, vm.agree, function (result) {

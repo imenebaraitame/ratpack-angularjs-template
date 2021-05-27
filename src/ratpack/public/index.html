@@ -34,14 +34,12 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li ui-sref-active="active"><a ui-sref="home">Home <span class="sr-only">(current)</span></a></li>
-            <li><a ui-sref="create">Create a User</a></li>
+            <li ui-sref-active="active"><a ui-sref="create">Create a User</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-            <!-- <li ng-hide="currentUser"><a ui-sref="login">Login</a></li> -->
-            <li><a ui-sref="login">Login</a></li>
-            <!-- <li ng-show="currentUser"><a ui-sref="logout">Logout</a></li> -->
-            <li><a ui-sref="logout">Logout</a></li>
+            <li ng-hide="currentUser"><a ui-sref="login">Login</a></li>
+            <li ng-show="currentUser"><a ui-sref="logout">Logout</a></li>
             <li><a ui-sref="about">About</a></li>
           </ul>
 
@@ -52,7 +50,7 @@
   <div class="container-fluid">
 
     <div ng-controller="HomeController">
-      <h1 ng-show="currentUser.id">Welcome back {{ currentUser.username }}!</h1>
+      <h1 ng-show="currentUser">Welcome back {{ currentUser.username }}!</h1>
     </div>
 
     <!-- ui router -->
