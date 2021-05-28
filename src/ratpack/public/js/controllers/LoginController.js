@@ -26,17 +26,4 @@ app.controller('LoginController', function ($rootScope, $scope, $state, $locatio
     });
   };
 
-  // Register
-  vm.register = function(){
-    vm.loading = true;
-    AuthenticationService.Register(vm.username, vm.password, vm.agree, function (result) {
-      if (result === true) {
-          $location.path('/login');
-      } else {
-          vm.error = result;
-          vm.loading = false;
-      }
-    });
-  };
-
 });

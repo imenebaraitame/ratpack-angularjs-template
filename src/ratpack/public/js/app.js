@@ -32,7 +32,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
       name: 'register',
       url: '/register',
       templateUrl: 'register.html',
-      controller: 'LoginController'
+      controller: 'RegisterController'
     })
     .state({
       name: 'logout',
