@@ -6,6 +6,7 @@ app.controller('RegisterController', function ($scope, $state, $location, Authen
   vm.error = '';
   vm.username = '';
   vm.password = '';
+  vm.repeatPassword = '';
   vm.loading = false;
   vm.agree = false;
 

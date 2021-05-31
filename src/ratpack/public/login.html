@@ -3,16 +3,16 @@
     <h2>Login</h2>
 
     <form name="form" ng-submit="form.$valid && vm.login()" novalidate>
-        <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error': form.$dirty && form.username.$invalid }">
             <input type="text" name="username" class="form-control" ng-model="vm.username" placeholder="User Name" required />
-            <div ng-messages="form.$submitted && form.username.$error" class="help-block">
-                <div ng-message="required">User Name is required</div>
+            <div ng-show="form.$dirty && form.username.$error.required" class="help-block">
+                <div>User Name is required</div>
             </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.password.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error': form.$dirty && form.password.$invalid }">
             <input type="password" name="password" class="form-control" ng-model="vm.password" placeholder="Password" autocomplete="false" required />
-            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
-                <div ng-message="required">Password is required</div>
+            <div ng-show="form.$dirty && form.password.$error.required" class="help-block">
+                <div>Password is required</div>
             </div>
         </div>
         <div class="form-group">
