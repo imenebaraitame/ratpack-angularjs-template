@@ -36,6 +36,12 @@ class UserService {
         }
     }
 
+     Promise<List<User>> findByUsername(String username) {
+         Blocking.get {
+             UserDao.queryForEq('username', username)
+         }
+     }
+
     Promise<List<User>> getAll() {
         Blocking.get {
             UserDao.queryForAll()

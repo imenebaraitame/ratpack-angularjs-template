@@ -1,9 +1,10 @@
+import com.fasterxml.jackson.databind.JsonNode
 import groovy.transform.CompileStatic
 import org.pac4j.core.exception.CredentialsException
 import org.pac4j.core.profile.CommonProfile
 import org.pac4j.core.util.CommonHelper
-import com.google.inject.Inject
-import ratpack.exec.Blocking
+//import javax.inject.Inject
+
 
 /**
 * AuthenticatorService: This class is used to authenticate users.
@@ -11,44 +12,46 @@ import ratpack.exec.Blocking
 @CompileStatic
 class AuthenticatorService {
 
-  @Inject
-  UserService userService
+//   private final UserService userService
 
-    CommonProfile authenticate(def credentials) {
-        if (credentials == null) {
+//    @Inject
+//    AuthenticatorService(UserService userService){
+//        this.userService = userService
+//    }
+
+    CommonProfile authenticate(JsonNode credentials, User user) {
+
+        if (credentials == null || user == null) {
             throwsException("No credential")
         }
-        String username = credentials["username"]
-        String password = credentials["password"]
+        String username = credentials.get("username").asText()
+        String password = credentials.get("password").asText()
 
         if (CommonHelper.isBlank(username) || CommonHelper.isBlank(password)) {
             throwsException("Credentials cannot be blank")
         }
-
-        // final CommonProfile profile = new CommonProfile()
-        Blocking.get {
-            userService.get("1").then { User user ->
-              println(user.toString())
-            if (user.username != user.password) {
-                // throwsException("Username or password does not match!")
-            } else {
-
-              // profile.setId(username)
-              // profile.addAttribute("username", user.username)
-              // profile.addAttribute("password", user.password)
-            }
-          }
-
+        // TODO: Here we use the raw password comparison (this should be changed in prod)
+        if (CommonHelper.areNotEquals(username, user.username) ||
+                CommonHelper.areNotEquals(password, user.password) ) {
+            throwsException("Username : '" + username + "' does not match password")
         }
-        // TODO: use the same username and password to login (this will be changed in prod)
-        // if (CommonHelper.areNotEquals(username, password)) {
-        //     throwsException("Username : '" + username + "' does not match password")
-        // }
+
          final CommonProfile profile = new CommonProfile()
-         profile.setId(username)
-         profile.addAttribute("username", username)
-         profile.addAttribute("password", password)
-        return profile
+//         Blocking.get {
+//             userService.get("1").then { User user ->
+//               println("********************** User: " + user.toString())
+//             if (user.username != user.password) {
+//                 throwsException("Username or password does not match!")
+//             } else {
+                 profile.setId(username)
+                 profile.addAttribute("username", user.username)
+                 profile.addAttribute("password", user.password)
+//                 profile.addAttribute("username", username)
+//                 profile.addAttribute("password", password)
+//             }
+//           }
+             return profile
+//         }
     }
 
     static throwsException(String message) {

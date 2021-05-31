@@ -1,6 +1,11 @@
 // import ratpack.groovy.template.MarkupTemplateModule
 // import static ratpack.groovy.Groovy.groovyMarkupTemplate
 // import static ratpack.groovy.Groovy.groovyTemplate
+import com.fasterxml.jackson.databind.JsonNode
+import com.zaxxer.hikari.HikariConfig
+import ratpack.http.Status
+import ratpack.service.StartEvent
+
 import static ratpack.jackson.Jackson.json
 import static ratpack.jackson.Jackson.fromJson
 import static ratpack.groovy.Groovy.ratpack
@@ -40,7 +45,7 @@ ratpack {
   // }
 
   bindings {
-    module HikariModule, { def config ->
+    module HikariModule, { HikariConfig config ->
         config.addDataSourceProperty("URL", "jdbc:h2:mem:users;INIT=CREATE SCHEMA IF NOT EXISTS DEV")
         config.dataSourceClassName = "org.h2.jdbcx.JdbcDataSource"
     }
@@ -51,7 +56,7 @@ ratpack {
     bind UserService
     bindInstance(new AuthenticatorService())
 
-    add Service.startup('startup'){ def event ->
+    add Service.startup('startup'){ StartEvent event ->
         // Create "users" table on startup
         ConnectionSource connectionSource = event.registry.get(H2ConnectionDataSource).connectionSource
         TableUtils.createTableIfNotExists(connectionSource, User)
@@ -88,36 +93,44 @@ ratpack {
     // }
 
     prefix("api") {
-      path("login") { def ctx ->
 
-        parse(jsonNode()).then({ def data ->
-                            Blocking.get({
-                                      CommonProfile model = ctx.get(AuthenticatorService).authenticate(data)
-                                      JwtGenerator generator = new JwtGenerator(signatureConfiguration, encryptionConfiguration)
-                                      return generator.generate(model)
-                                  }).onError({ def e ->
-                                    ctx.response.status(400)
-                                    render e.message
-                            }).then({ def token ->
-                              render json(['token': token])
-                            })
+      path("login") { UserService userService, Context ctx ->
+        parse(jsonNode()).then({ JsonNode data ->
+                          // TODO: you can check if there are some users in the DB first...
+                          userService.findByUsername( data.get('username').asText() ).then { List<User> users ->
+                            if (users.isEmpty()){
+                              ctx.response.status(Status.NOT_FOUND).send('Username or password is incorrect')
+                            } else {
+                              Blocking.get({
+                                CommonProfile model = ctx.get(AuthenticatorService).authenticate(data, users.first())
+                                JwtGenerator generator = new JwtGenerator(signatureConfiguration, encryptionConfiguration)
+                                return generator.generate(model)
+                              }).onError({ Throwable e ->
+                                ctx.response.status(Status.BAD_REQUEST).send(e.message)
+                              }).then({ String token ->
+                                render json(['token': token])
+                              })
+                            }
+                          }
+
                         })
-          }
+          } // path "/login"
 
-          post("logout") { def ctx ->
+          post("logout") { Context ctx ->
               RatpackPac4j.logout(ctx).then {
                   redirect("/") // not really needed.
               }
-          }
+          } // post "/logout"
 
           post("register") { UserService userService ->
             parse(fromJson(User)).then { User user ->
-              userService.create(user).then {
+              userService.create(user).then { Integer id ->
                 render json([result: (user != null) ])
               }
             }
-          }
-    }
+          } // post "/register"
+
+    } // prefix "/api"
 
     // Prevent access to all next coming handlers
     // all(RatpackPac4j.requireAuth( parameterClient ))
@@ -142,7 +155,7 @@ ratpack {
           }
           // Delete a user
           delete {
-            userService.delete(pathTokens['id']).then { def id ->
+            userService.delete(pathTokens['id']).then { Integer id ->
                 render(json(['id': id]))
             }
           }
