@@ -12,7 +12,7 @@
     </div>
 
     <div class="form-group" ng-class="{'has-error' : formUser.password.$dirty && formUser.password.$invalid}">
-      <input type="password" autocomplete="false" minlength="5" ng-minlength="5" name="password" class="form-control" ng-model="user.password" placeholder="Password" required>
+      <input type="password" autocomplete="false" ng-minlength="5" name="password" class="form-control" ng-model="user.password" placeholder="Password" required>
       <span ng-show="formUser.password.$dirty && formUser.password.$invalid" class="help-block">Password length must be 5 chars or greater.</span>
     </div>
 

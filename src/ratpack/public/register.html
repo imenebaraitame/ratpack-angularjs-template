@@ -2,42 +2,44 @@
 
     <h2>Register</h2>
 
-    <div ng-if="vm.error" class="alert alert-danger">{{ vm.error | json }}</div>
+    <div ng-if="vm.error" class="alert alert-danger">{{ vm.error }}</div>
 
     <form method="post" name="form" ng-submit="form.$valid && vm.register()">
-        <div class="form-group" ng-class="{ 'has-error': form.$dirty && form.username.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$invalid }">
             <label for="username">User Name</label>
             <input type="text" name="username" id="username" ng-model="vm.username" class="form-control" required ng-minlength="3" />
-            <div ng-show="form.$dirty && form.username.$error.required" class="help-block">
-                <p>User Name is required</p>
-            </div>
-            <div ng-show="form.$dirty && form.username.$error.minlength" class="help-block">
-                <p>User Name must be greater than 3 letters.</p>
+            <div ng-show="form.username.$dirty && form.username.$invalid" class="help-block">
+                <p ng-show="form.username.$error.required">User Name is required</p>
+                <p ng-show="form.username.$error.minlength">User Name must be greater than 3 letters.</p>
             </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': form.$dirty && form.password.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$invalid }">
             <label for="password">Password</label>
             <input type="password" name="password" id="password" ng-model="vm.password" class="form-control" autocomplete="false" required />
-            <div ng-show="form.$dirty && form.password.$error.required" class="help-block">
+            <div ng-show="form.password.$dirty && form.password.$error.required" class="help-block">
                 <p>Password is required</p>
             </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': form.$dirty && form.repeatPassword.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error': form.repeatPassword.$dirty && (form.repeatPassword.$invalid || vm.password !== vm.repeatPassword) }">
             <label for="repeatPassword">Repeat Password</label>
-            <input type="password" id="repeatPassword" name="repeatPassword" ng-model="repeatPassword" class="form-control" autocomplete="false" required />
-            <div ng-show="form.$dirty && form.repeatPassword.$error.required" class="help-block">
-                <p>Please confirm your Password</p>
+            <input type="password" id="repeatPassword" name="repeatPassword" ng-model="vm.repeatPassword" class="form-control" autocomplete="false" required />
+            <div ng-show="form.repeatPassword.$dirty && (form.repeatPassword.$invalid || vm.password !== vm.repeatPassword)" class="help-block">
+                <p ng-show="form.repeatPassword.$error.required">Please confirm your Password</p>
+                <p ng-show="vm.password !== vm.repeatPassword">Password doesn't much!</p>
             </div>
         </div>
-        <div class="checkbox">
+        <div class="form-group checkbox">
           <label>
-            <input type="checkbox" name="agree" ng-model="vm.agree">
+            <input type="checkbox" name="agree" ng-model="vm.agree" required>
              Agree to <a href="#">ToS</a> and conditions?
           </label>
+          <div ng-show="!vm.agree" class="help-block">
+            <p>Please agree and sign.</p>
+          </div>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-success" ng-disabled="vm.loading || !vm.agree || !form.$valid">Register</button>
+            <button type="submit" class="btn btn-success" ng-disabled="vm.loading || !vm.agree || form.$invalid || vm.password !== vm.repeatPassword">Register</button>
             <img ng-if="vm.loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
             <a ui-sref="login" class="btn btn-link">Cancel</a>
         </div>
