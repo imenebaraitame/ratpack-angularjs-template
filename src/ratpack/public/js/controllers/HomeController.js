@@ -1,17 +1,21 @@
 app.controller('HomeController', function ($scope, $state, User, $modal, AuthenticationService) {
 
-
-  // Get all users
-  User.query(function (users) {
-    $scope.users = users || [];
+  var init = function () {
+    $scope.users = $scope.getAllUsers();
     // if ($scope.users.length == 0){
     //   $state.transitionTo('create');
     // }
-  });
+  }
+
+  // Get all users
+  $scope.getAllUsers = function () {
+    return User.query(function (users) {
+      return users || [];
+    });
+  }
 
   // Delete a User
   $scope.deleteUser = function(user){
-
     var modalInstance = $modal.open({
       templateUrl: 'modal-delete',
       scope: $scope
@@ -30,7 +34,8 @@ app.controller('HomeController', function ($scope, $state, User, $modal, Authent
     $scope.cancel = function () {
       modalInstance.dismiss();
     }
-
   }
+
+  init();
 
 });

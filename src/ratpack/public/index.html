@@ -49,7 +49,7 @@
 
   <div class="container-fluid">
 
-    <div ng-controller="HomeController">
+    <div ng-controller="HomeController" ng-init="init()">
       <h1 ng-show="currentUser">Welcome back {{ currentUser.username }}!</h1>
     </div>
 

@@ -20,11 +20,11 @@ import ratpack.pac4j.RatpackPac4j
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator
 import org.pac4j.jwt.profile.JwtGenerator
 import org.pac4j.http.client.direct.ParameterClient
+import org.pac4j.http.client.direct.HeaderClient
 import ratpack.exec.Blocking
 import org.pac4j.core.profile.CommonProfile
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration
-
 /**
  * Example auth with cURL:
  * curl -X POST -H 'Content-Type: application/json' -d '{"username":"admin","password":"admin"}' localhost:3000/api/login
@@ -33,7 +33,7 @@ import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration
  "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..A75iJhXdS4dfiLo9.1cnSo2Z9jR_JLzNk54ikLBEapPdpIfpp_Lo3SQYD96CjdM8UthT8vsjNG2oRhkSqHScRSLoKWrZo0-HkKDj4Jdu0m05imPs8PsuEsz0GjXwG7JQiPe7W135SLMSh4CJWW5QgzmtZg9skriCqq7XpMR16hQe9eonPZfBA45G_tPSmRnoHg0PUMpZgH_e7sMjOnqmnKeuWMRYUPPfcFE0Hp13lE3Vp_00_U_feKBnCtM1l3eBMdKZsiY-j2lBkaAavMRdSBgUlhO4_gyRNA0_JccslpV0BzLnaTDTUFi9GODm3SRrtv3OMPtL6ih4X.nSvhWSKZB9XALzRljXBonQ
  */
 
-def JWT_SALT = '12345678901234567890123456789012' // length = 32
+String JWT_SALT = '12345678901234567890123456789012' // length = 32
 
 ratpack {
   serverConfig {
@@ -62,18 +62,21 @@ ratpack {
         TableUtils.createTableIfNotExists(connectionSource, User)
     }
 
-  } // bindings
+  } // bindingsJwtGenerator
 
   handlers {
 
+    // Direct client authenticator
     final def signatureConfiguration = new SecretSignatureConfiguration(JWT_SALT)
     final def encryptionConfiguration = new SecretEncryptionConfiguration(JWT_SALT)
     final def jwtAuthenticator = new JwtAuthenticator([signatureConfiguration], [encryptionConfiguration])
     final def parameterClient = new ParameterClient("token", jwtAuthenticator)
+    final def headerClient = new HeaderClient("Authorization", "Bearer ", jwtAuthenticator)
     parameterClient.supportGetRequest = true
-    parameterClient.supportPostRequest = false
+    parameterClient.supportPostRequest = true
 
-    all(RatpackPac4j.authenticator('callback', parameterClient))
+    // all(RatpackPac4j.authenticator('callback', parameterClient))
+    all(RatpackPac4j.authenticator(parameterClient, headerClient))
 
     // get {
     //   render groovyMarkupTemplate("index.gtpl", title: "My Ratpack App")
@@ -114,13 +117,13 @@ ratpack {
                           }
 
                         })
-          } // path "/login"
+          } // path "/api/login"
 
           post("logout") { Context ctx ->
               RatpackPac4j.logout(ctx).then {
                   redirect("/") // not really needed.
               }
-          } // post "/logout"
+          } // post "/api/logout"
 
           post("register") { UserService userService ->
             parse(fromJson(User)).then { User user ->
@@ -128,14 +131,17 @@ ratpack {
                 render json([result: (user != null) ])
               }
             }
-          } // post "/register"
+          } // post "/api/register"
 
     } // prefix "/api"
 
-    // Prevent access to all next coming handlers
-    // all(RatpackPac4j.requireAuth( parameterClient ))
+
 
     prefix('users') {
+
+      // Prevent access to all next coming handlers
+      // all(RatpackPac4j.requireAuth( ParameterClient.class ))
+      all(RatpackPac4j.requireAuth( HeaderClient.class ))
 
       path(":id") { UserService userService ->
         byMethod {
@@ -166,10 +172,18 @@ ratpack {
 
         byMethod {
           // Get all users
-          get {
-            userService.all.then { List<User> users ->
-              render json(users)
-            }
+          get { Context ctx ->
+             RatpackPac4j.userProfile(ctx).route({ Optional<CommonProfile> profile ->
+               profile.isPresent()
+             }, { Optional<CommonProfile> profile ->
+              userService.all.then { List<User> users ->
+                // You can also used `profile.get().attributes` which is a user profile
+                render json(users)
+              }
+             }).then{ Optional<CommonProfile> profile ->
+                 ctx.response.status(Status.FORBIDDEN).send("Access denied${profile == Optional.empty()?', you need to login':'. An error has occurred'}.")
+             }
+
           }
           // Create a user
           post {
@@ -191,10 +205,9 @@ ratpack {
 
       } // path
 
-    } // prefix
+    } // prefix "/users"
 
     files { dir "public" indexFiles 'index.html' }
-
 
   } // handlers
 
