@@ -36,9 +36,9 @@ class UserService {
         }
     }
 
-     Promise<List<User>> findByUsername(String username) {
+     Promise<List<User>> findByUsernameAndPassword(String username, String password) {
          Blocking.get {
-             UserDao.queryForEq('username', username)
+           UserDao.queryForFieldValues( ['username': username, 'password': password] as Map<String, Object> )
          }
      }
 

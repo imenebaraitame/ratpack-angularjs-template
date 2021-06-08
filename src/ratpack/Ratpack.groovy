@@ -100,19 +100,24 @@ ratpack {
       path("login") { UserService userService, Context ctx ->
         parse(jsonNode()).then({ JsonNode data ->
                           // TODO: you can check if there are some users in the DB first...
-                          userService.findByUsername( data.get('username').asText() ).then { List<User> users ->
+                          userService.findByUsernameAndPassword( data.get('username').asText(),  data.get('password').asText() ).then { List<User> users ->
                             if (users.isEmpty()){
                               ctx.response.status(Status.NOT_FOUND).send('Username or password is incorrect')
                             } else {
-                              Blocking.get({
-                                CommonProfile model = ctx.get(AuthenticatorService).authenticate(data, users.first())
-                                JwtGenerator generator = new JwtGenerator(signatureConfiguration, encryptionConfiguration)
-                                return generator.generate(model)
-                              }).onError({ Throwable e ->
-                                ctx.response.status(Status.BAD_REQUEST).send(e.message)
-                              }).then({ String token ->
-                                render json(['token': token])
-                              })
+                              User user = users.first()
+                              if (!user.isActive) {
+                                ctx.response.status(Status.FORBIDDEN).send('Sorry! Your account is not activated.')
+                              } else {
+                                  Blocking.get({
+                                    CommonProfile model = ctx.get(AuthenticatorService).authenticate(data, user)
+                                    JwtGenerator generator = new JwtGenerator(signatureConfiguration, encryptionConfiguration)
+                                    return generator.generate(model)
+                                  }).onError({ Throwable e ->
+                                    ctx.response.status(Status.BAD_REQUEST).send(e.message)
+                                  }).then({ String token ->
+                                    render json(['token': token])
+                                  })
+                                }
                             }
                           }
 
