@@ -16,7 +16,6 @@ app.controller('LoginController', function ($rootScope, $scope, $state, $locatio
   vm.login = function(){
     vm.loading = true;
     AuthenticationService.Login(vm.username, vm.password, function (result) {
-      console.log('result: ', result);
       if (result === true) {
           $rootScope.currentUser = $localStorage.currentUser;
           $location.path('/');

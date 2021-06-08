@@ -1,7 +1,9 @@
-app.controller('HomeController', function ($scope, $state, User, $modal, AuthenticationService) {
+app.controller('HomeController', function ($rootScope, $scope, $state, User, $modal, AuthenticationService) {
 
   var init = function () {
-    $scope.users = $scope.getAllUsers();
+    if ($rootScope.currentUser){
+      $scope.users = $scope.getAllUsers();
+    }
     // if ($scope.users.length == 0){
     //   $state.transitionTo('create');
     // }
