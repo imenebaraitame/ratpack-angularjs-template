@@ -3,6 +3,7 @@ import groovy.transform.CompileStatic
 import org.pac4j.core.exception.CredentialsException
 import org.pac4j.core.profile.CommonProfile
 import org.pac4j.core.util.CommonHelper
+// import org.pac4j.core.profile.jwt.JwtClaims
 
 
 /**
@@ -33,6 +34,7 @@ class AuthenticatorService {
          profile.setId(username)
          profile.addAttribute("username", user.username)
          profile.addAttribute("password", user.password)
+         // profile.addAttribute(JwtClaims.ISSUED_AT, new Date())
          return profile
     }
 

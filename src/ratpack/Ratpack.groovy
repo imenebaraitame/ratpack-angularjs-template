@@ -145,7 +145,6 @@ ratpack {
     prefix('users') {
 
       // Prevent access to all next coming handlers
-      // all(RatpackPac4j.requireAuth( ParameterClient.class ))
       all(RatpackPac4j.requireAuth( HeaderClient.class ))
 
       path(":id") { UserService userService ->
