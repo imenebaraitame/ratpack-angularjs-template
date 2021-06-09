@@ -4,6 +4,8 @@
 
   <h2>Create a User: </h2>
 
+  <div ng-if="error" class="alert alert-danger">{{ error }}</div>
+
   <form name="formUser" class="form-vertical" action="#">
 
     <div class="form-group" ng-class="{'has-error' : formUser.username.$dirty && formUser.username.$invalid}">

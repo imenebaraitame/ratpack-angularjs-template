@@ -19,7 +19,7 @@
             <input type="checkbox" disabled ng-checked="user.isActive">
           </td>
           <td>
-            <button type="button" name="btn-delete" class="btn btn-sm btn-danger" ng-click="deleteUser(user)">Delete</button>
+            <button type="button" name="btn-delete" class="btn btn-sm btn-danger" ng-click="deleteUser(user)" ng-disabled="getCurrentUser().username === user.username">Delete</button>
             <button type="button" name="btn-edit" class="btn btn-sm btn-primary" ui-sref="edit({userId: user.id})">Edit</button>
           </td>
         </tr>

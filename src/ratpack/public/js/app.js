@@ -61,6 +61,7 @@ function run($rootScope, $http, $location, $localStorage) {
         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
     }
 
+    // This makes it easy to check if user logged in on the home page
     $rootScope.getCurrentUser = function () {
       return $localStorage.currentUser;
     }

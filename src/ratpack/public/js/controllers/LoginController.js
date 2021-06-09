@@ -1,4 +1,4 @@
-app.controller('LoginController', function ($rootScope, $scope, $state, $location, $localStorage, AuthenticationService) {
+app.controller('LoginController', function ($scope, $state, AuthenticationService) {
 
   $scope.vm = {};
   var vm = $scope.vm;
@@ -17,7 +17,7 @@ app.controller('LoginController', function ($rootScope, $scope, $state, $locatio
     vm.loading = true;
     AuthenticationService.Login(vm.username, vm.password, function (result) {
       if (result === true) {
-          $location.path('/');
+          $state.go('home');
       } else {
           vm.error = result; //'Username or password is incorrect';
           vm.loading = false;

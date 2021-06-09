@@ -1,4 +1,4 @@
-app.controller('HomeController', function ($rootScope, $scope, $state, User, $modal, AuthenticationService) {
+app.controller('HomeController', function ($rootScope, $scope, User, $modal) {
 
   var init = function () {
     if ($rootScope.getCurrentUser()){

@@ -137,9 +137,11 @@ ratpack {
               }
           } // post "/api/logout"
 
-          post("register") { UserService userService ->
+          post("register") { Context ctx, UserService userService ->
             parse(fromJson(User)).then { User user ->
-              userService.create(user).then { Integer id ->
+              userService.create(user).onError { def e ->
+                ctx.response.status(Status.BAD_REQUEST).send(e.message)
+              }.then { Integer id ->
                 render json([result: (user != null) ])
               }
             }
@@ -197,7 +199,7 @@ ratpack {
 
           }
           // Create a user
-          post {
+          post { Context ctx ->
             parse(fromJson(User)).then { User user ->
               // It works in case you want to use the default behavior of $resource from angularjs (you can then delete the update PUT method above)
               // if (user.id){
@@ -205,8 +207,10 @@ ratpack {
               //     render(json(user))
               //   }
               // } else {
-                userService.create( user ).then { Integer id ->
-                  render(json(user))
+                userService.create( user ).onError { Throwable e ->
+                  ctx.response.status(Status.BAD_REQUEST).send(e.message)
+                }.then { Integer id ->
+                  render(json([id: id]))
                 }
               // }
             }

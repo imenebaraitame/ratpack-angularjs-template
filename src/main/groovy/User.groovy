@@ -10,7 +10,7 @@ import groovy.transform.ToString
 class User {
     @DatabaseField(generatedId = true)
     int id
-    @DatabaseField
+    @DatabaseField( unique = true)
     String username
     @DatabaseField
     String password
