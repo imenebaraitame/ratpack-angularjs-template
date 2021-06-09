@@ -1,9 +1,9 @@
-import com.google.inject.Inject
-import com.j256.ormlite.dao.Dao
-import com.j256.ormlite.dao.DaoManager
 import groovy.transform.CompileStatic
 import ratpack.exec.Blocking
 import ratpack.exec.Promise
+import com.google.inject.Inject
+import com.j256.ormlite.dao.Dao
+import com.j256.ormlite.dao.DaoManager
 
 /**
 * UserService: This class will be used to manage user's User in the future releases.

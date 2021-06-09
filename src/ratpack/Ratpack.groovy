@@ -1,30 +1,31 @@
 // import ratpack.groovy.template.MarkupTemplateModule
 // import static ratpack.groovy.Groovy.groovyMarkupTemplate
 // import static ratpack.groovy.Groovy.groovyTemplate
+// import ratpack.groovy.template.TextTemplateModule
 // import ratpack.session.Session
 import com.fasterxml.jackson.databind.JsonNode
 import com.zaxxer.hikari.HikariConfig
-import ratpack.http.Status
-import ratpack.service.StartEvent
 import static ratpack.jackson.Jackson.json
 import static ratpack.jackson.Jackson.fromJson
+import static ratpack.jackson.Jackson.jsonNode
 import static ratpack.groovy.Groovy.ratpack
+import ratpack.http.Status
+import ratpack.service.StartEvent
+import ratpack.exec.Blocking
 import ratpack.handling.Context
 import ratpack.hikari.HikariModule
 import ratpack.service.Service
+import ratpack.session.SessionModule
+import ratpack.pac4j.RatpackPac4j
 import com.j256.ormlite.support.ConnectionSource
 import com.j256.ormlite.table.TableUtils
-import ratpack.session.SessionModule
-import static ratpack.jackson.Jackson.jsonNode
-import ratpack.pac4j.RatpackPac4j
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator
 import org.pac4j.jwt.profile.JwtGenerator
-import org.pac4j.http.client.direct.ParameterClient
-import org.pac4j.http.client.direct.HeaderClient
-import ratpack.exec.Blocking
-import org.pac4j.core.profile.CommonProfile
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration
+import org.pac4j.http.client.direct.ParameterClient
+import org.pac4j.http.client.direct.HeaderClient
+import org.pac4j.core.profile.CommonProfile
 /**
  * Example auth with cURL:
  * curl -X POST -H 'Content-Type: application/json' -d '{"username":"admin","password":"admin"}' localhost:3000/api/login
@@ -40,9 +41,6 @@ ratpack {
     development(true)
     port(3000) // default port = 5050
   }
-  // bindings {
-  //   module MarkupTemplateModule
-  // }
 
   bindings {
     module HikariModule, { HikariConfig config ->
@@ -50,6 +48,8 @@ ratpack {
         config.dataSourceClassName = "org.h2.jdbcx.JdbcDataSource"
     }
 
+    // module MarkupTemplateModule
+    // module TextTemplateModule
     module SessionModule
 
     bind H2ConnectionDataSource
