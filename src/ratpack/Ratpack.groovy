@@ -1,11 +1,11 @@
 // import ratpack.groovy.template.MarkupTemplateModule
 // import static ratpack.groovy.Groovy.groovyMarkupTemplate
 // import static ratpack.groovy.Groovy.groovyTemplate
+// import ratpack.session.Session
 import com.fasterxml.jackson.databind.JsonNode
 import com.zaxxer.hikari.HikariConfig
 import ratpack.http.Status
 import ratpack.service.StartEvent
-
 import static ratpack.jackson.Jackson.json
 import static ratpack.jackson.Jackson.fromJson
 import static ratpack.groovy.Groovy.ratpack
@@ -127,6 +127,13 @@ ratpack {
           post("logout") { Context ctx ->
               RatpackPac4j.logout(ctx).then {
                   redirect("/") // not really needed.
+                  // or:
+                  // def session = ctx.get(Session)
+                  // if (session){
+                  //   session.terminate()
+                  // }
+                  // or:
+                  // ctx.next()
               }
           } // post "/api/logout"
 
