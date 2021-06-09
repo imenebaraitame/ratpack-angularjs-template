@@ -44,7 +44,6 @@ app.factory('AuthenticationService', function ($rootScope, $location, $http, $lo
         .success(function (response) {
           // remove user from local storage and clear http auth header
           delete $localStorage.currentUser;
-          $rootScope.currentUser = false;
           $http.defaults.headers.common.Authorization = '';
           $location.path('/login');
         });

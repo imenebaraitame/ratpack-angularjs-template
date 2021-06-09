@@ -61,6 +61,10 @@ function run($rootScope, $http, $location, $localStorage) {
         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
     }
 
+    $rootScope.getCurrentUser = function () {
+      return $localStorage.currentUser;
+    }
+
     // redirect to login page if not logged in and trying to access a restricted page
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
         var publicPages = ['/login', '/register', '/about'];

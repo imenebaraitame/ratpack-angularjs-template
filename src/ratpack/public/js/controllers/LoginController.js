@@ -17,7 +17,6 @@ app.controller('LoginController', function ($rootScope, $scope, $state, $locatio
     vm.loading = true;
     AuthenticationService.Login(vm.username, vm.password, function (result) {
       if (result === true) {
-          $rootScope.currentUser = $localStorage.currentUser;
           $location.path('/');
       } else {
           vm.error = result; //'Username or password is incorrect';
