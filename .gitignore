@@ -5,7 +5,6 @@
 !src/**/build/
 gradle/
 gradlew*
-public/uploads/*
 
 # Ignore Gradle GUI config
 gradle-app.setting
