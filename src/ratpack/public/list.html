@@ -1,0 +1,42 @@
+<div class="row">
+
+  <div class="col-sm-12">
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Is Active?</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in users">
+          <td>{{user.id}}</td>
+          <td>{{user.username}}</td>
+          <td>
+            <input type="checkbox" disabled ng-checked="user.isActive">
+          </td>
+          <td>
+            <button type="button" name="btn-delete" class="btn btn-sm btn-danger" ng-click="deleteUser(user)" ng-disabled="getCurrentUser().username === user.username">Delete</button>
+            <button type="button" name="btn-edit" class="btn btn-sm btn-primary" ui-sref="edit({userId: user.id})">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div><!-- .col-sm-12 -->
+
+  <script type="text/ng-template" id="modal-delete">
+      <div class="modal-header">
+          <h3 class="modal-title" id="modal-title">Delete a user?</h3>
+      </div>
+      <div class="modal-body" id="modal-body">Do you really want to delete this user?</div>
+      <div class="modal-footer">
+          <button class="btn btn-warning" type="button" ng-click="yes()">Yes</button>
+          <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
+      </div>
+  </script>
+
+</div><!-- .row -->

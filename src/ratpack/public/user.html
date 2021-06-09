@@ -1,0 +1,37 @@
+<div class="row">
+
+  <div class="col-sm-12">
+
+  <h2>Create a User: </h2>
+
+  <div ng-if="error" class="alert alert-danger">{{ error }}</div>
+
+  <form name="formUser" class="form-vertical" action="#">
+
+    <div class="form-group" ng-class="{'has-error' : formUser.username.$dirty && formUser.username.$invalid}">
+      <input type="text" name="username" class="form-control" ng-model="user.username" placeholder="User Name" required>
+      <span ng-show="formUser.username.$dirty && formUser.username.$invalid" class="help-block">User Name must not be empty.</span>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error' : formUser.password.$dirty && formUser.password.$invalid}">
+      <input type="password" autocomplete="false" ng-minlength="5" name="password" class="form-control" ng-model="user.password" placeholder="Password" required>
+      <span ng-show="formUser.password.$dirty && formUser.password.$invalid" class="help-block">Password length must be 5 chars or greater.</span>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="isActive" ng-model="user.isActive">
+         Is Active ?
+      </label>
+    </div>
+
+    <div class="form-group pull-right">
+      <input type="button" class="btn btn-success" value="Create" ng-hide="user.id" ng-click="createUser()" ng-disabled="formUser.username.$invalid || formUser.password.$invalid" />
+      <input type="button" class="btn btn-primary" value="Save" ng-show="user.id" ng-click="updateUser()" ng-disabled="formUser.username.$invalid || formUser.password.$invalid"/>
+    </div>
+
+  </form>
+
+  </div><!-- .col-sm-12 -->
+
+</div><!-- .row -->
