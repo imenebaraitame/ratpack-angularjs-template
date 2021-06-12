@@ -1,5 +1,6 @@
-Ratpack AngularJS Template
+# Ratpack AngularJS Template
 -----------------------------
+[![Build Status](https://www.travis-ci.com/bitsnaps/ratpack-angularjs-template.svg?branch=master)](https://www.travis-ci.com/bitsnaps/ratpack-angularjs-template)
 
 This project is has been created using a basic Groovy Ratpack application from lazybones.
 
