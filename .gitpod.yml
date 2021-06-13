@@ -11,5 +11,5 @@ ports:
 # start up tasks
 tasks:
   # init: Will be executed one time when creating a workspace, command: will be exected each time you open workspace
-  - init: gradle build test shadowJar
-    command: gradle run -t
+  - init: ./gradlew build test shadowJar
+    command: ./gradlew run -t # or java -jar build/libs/ratpack-angularjs-template-all.jar
