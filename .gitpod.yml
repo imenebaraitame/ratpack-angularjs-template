@@ -1,0 +1,16 @@
+# image:
+#   file: .gitpod.Dockerfile
+
+# exposed ports
+ports:
+- port: 8080
+  onOpen: open-preview
+  # onOpen: ignore
+
+
+# start up tasks
+tasks:
+  # init: Will be executed one time when creating a workspace, command: will be exected each time you open workspace
+  - init: gradlew build test shadowJar
+    command: gradlew run -t
+  # - command: gp await-port 8080 && gp preview $(gp url 8080)
