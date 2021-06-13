@@ -1,3 +1,4 @@
+# Dockerfile is disabled, we'll use default jdk11 & gradle 7
 # image:
 #   file: .gitpod.Dockerfile
 
@@ -11,6 +12,6 @@ ports:
 # start up tasks
 tasks:
   # init: Will be executed one time when creating a workspace, command: will be exected each time you open workspace
-  - init: gradlew build test shadowJar
-    command: gradlew run -t
+  - init: gradle build test shadowJar
+    command: gradle run -t
   # - command: gp await-port 8080 && gp preview $(gp url 8080)
