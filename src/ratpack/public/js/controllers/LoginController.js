@@ -7,7 +7,6 @@ app.controller('LoginController', function ($scope, $state, AuthenticationServic
   vm.username = '';
   vm.password = '';
   vm.loading = false;
-  vm.agree = false;
 
   // reset login status
   AuthenticationService.Logout();
