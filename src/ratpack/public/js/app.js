@@ -55,7 +55,7 @@ app.config(['$resourceProvider', function($resourceProvider) {
   $resourceProvider.defaults.stripTrailingSlashes = false;
 }]);*/
 
-function run($rootScope, $http, $location, $localStorage) {
+function run($rootScope, $http, $location, $localStorage, $state) {
     // keep user logged in after page refresh
     if ($localStorage.currentUser) {
         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
@@ -71,7 +71,7 @@ function run($rootScope, $http, $location, $localStorage) {
         var publicPages = ['/login', '/register', '/about'];
         var restrictedPage = publicPages.indexOf($location.path()) === -1;
         if (restrictedPage && !$localStorage.currentUser) {
-            $location.path('/login');
+          $state.go('login');
         }
     });
 }
