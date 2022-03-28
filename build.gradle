@@ -20,7 +20,7 @@ repositories {
 dependencies {
 
   // Add Pac4J for Authentication
-//  compile ratpack.dependency("pac4j")
+  //compile ratpack.dependency("pac4j")
   // Add H2 database & Hikari modules to Ratpack
   compile ratpack.dependency('h2')
   compile ratpack.dependency('hikari')
