@@ -1,21 +1,21 @@
-app.controller('HomeController', function ($rootScope, $scope, User, $modal) {
+app.controller('HomeController', function ($rootScope, $scope, User, $uibModal, $state) {
 
   var init = function () {
     if ($rootScope.getCurrentUser()){
       $scope.users = $scope.getAllUsers();
     }
-  }
+  };
 
   // Get all users
   $scope.getAllUsers = function () {
     return User.query(function (users) {
       return users || [];
     });
-  }
+  };
 
   // Delete a User
   $scope.deleteUser = function(user){
-    var modalInstance = $modal.open({
+    var modalInstance = $uibModal.open({
       templateUrl: 'modal-delete',
       scope: $scope
     });
@@ -29,11 +29,11 @@ app.controller('HomeController', function ($rootScope, $scope, User, $modal) {
           }
       });
       modalInstance.close();
-    }
+    };
     $scope.cancel = function () {
       modalInstance.dismiss();
-    }
-  }
+    };
+  };
 
   init();
 
