@@ -3,13 +3,27 @@ image:
 
 # exposed ports
 ports:
-- port: 8080
-  onOpen: open-preview
+- port: 3000
+  onOpen: open-browser
+- port: 8080 # LogicalDOC CE
+onOpen: open-preview
   # onOpen: ignore
 
 
 # start up tasks
 tasks:
-  # init: Will be executed one time when creating a workspace, command: will be exected each time you open workspace
-  - init: ./gradlew build test shadowJar
-    command: ./gradlew run -t # or java -jar build/libs/ratpack-angularjs-template-all.jar
+  # init: Will be executed one time when creating a workspace, command: will be expected each time you open workspace
+  - init: |
+      git clone --depth 1 https://github.com/logicaldoc/logicaldoc-ce.git logicaldoc
+      cd logicaldoc
+      git checkout 8.6.1
+      echo "you should run /setup to configure LogicalDOC"
+      docker-compose up --no-start
+      cd ..
+      ./gradlew build test shadowJar
+    command: |
+      cd logicaldoc
+      docker-compose up -d
+      cd ..
+      ./gradlew run -t # or java -jar build/libs/ratpack-angularjs-template-all.jar
+  - command: gp await-port 3000 && gp preview "$(gp url 3000)/"
