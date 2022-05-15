@@ -2,6 +2,8 @@
 -----------------------------
 [![Build Status](https://www.travis-ci.com/bitsnaps/ratpack-angularjs-template.svg?branch=master)](https://www.travis-ci.com/bitsnaps/ratpack-angularjs-template)
 
+[![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
+
 This project is has been created using a basic Groovy Ratpack application from lazybones.
 
 It doesn't do much, it offers a CRUD operations on `User` model, but it can be useful to spin up a new Ratpack project.
