@@ -5,6 +5,11 @@
 // import ratpack.session.Session
 import com.fasterxml.jackson.databind.JsonNode
 import com.zaxxer.hikari.HikariConfig
+import groovy.json.JsonSlurper
+import ratpack.http.client.HttpClient
+import ratpack.http.client.ReceivedResponse
+import ratpack.http.client.RequestSpec
+
 import static ratpack.jackson.Jackson.json
 import static ratpack.jackson.Jackson.fromJson
 import static ratpack.jackson.Jackson.jsonNode
@@ -26,6 +31,7 @@ import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration
 import org.pac4j.http.client.direct.ParameterClient
 import org.pac4j.http.client.direct.HeaderClient
 import org.pac4j.core.profile.CommonProfile
+import groovy.json.JsonSlurper
 /**
  * Example auth with cURL:
  * curl -X POST -H 'Content-Type: application/json' -d '{"username":"admin","password":"admin"}' localhost:3000/api/login
@@ -94,6 +100,16 @@ ratpack {
     //         redirect("/")
     //     }
     // }
+      get("docList"){ HttpClient client ->
+
+          URI url ="http://0.0.0.0:8080/services/rest/folder/listChildren?folderId=4".toURI()
+          client.get(url) { RequestSpec reqSpec ->
+              reqSpec.basicAuth("admin", "admin")
+              reqSpec.headers.set ("Accept", 'application/json')
+          }.then { ReceivedResponse res ->
+              res.forwardTo(response)
+          }
+      }//docList
 
     prefix("api") {
 

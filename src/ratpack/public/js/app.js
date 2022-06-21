@@ -40,9 +40,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controller: 'LoginController'
     })
     .state({
-      name: 'about',
-      url: '/about',
-      template: '<h1>About</h1>'
+      name: 'docList',
+      url: '/docList',
+      controller:'DocListController',
+      templateUrl: 'docList.html'
     });
 
   $urlRouterProvider.otherwise('/');
@@ -68,7 +69,7 @@ function run($rootScope, $http, $location, $localStorage, $state) {
 
     // redirect to login page if not logged in and trying to access a restricted page
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        var publicPages = ['/login', '/register', '/about'];
+        var publicPages = ['/login', '/register', '/docList'];
         var restrictedPage = publicPages.indexOf($location.path()) < 0;
         if (restrictedPage && !$localStorage.currentUser) {
           $state.go('login');

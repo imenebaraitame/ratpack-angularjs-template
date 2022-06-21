@@ -40,7 +40,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a ui-sref="login">{{ getCurrentUser().token ? 'Logout ('+getCurrentUser().username+')' : 'Login' }}</a></li>
             <!-- <li ng-show="getCurrentUser().token"><a ui-sref="logout">Logout</a></li> -->
-            <li><a ui-sref="about">About</a></li>
+            <li><a ui-sref="docList">Listing document</a></li>
           </ul>
 
         </div><!-- /.navbar-collapse -->
@@ -66,6 +66,8 @@
   <script src="/js/controllers/LoginController.js"></script>
   <script src="/js/controllers/UserController.js"></script>
   <script src="/js/controllers/HomeController.js"></script>
+  <script src="/js/controllers/DocListController.js"></script>
+
 
   </body>
 </html>
